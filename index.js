@@ -8,17 +8,18 @@ app.use(express.json());
 
 // --- KONFIGURASI DATABASE (Nanti diisi endpoint RDS) ---
 const db = mysql.createConnection({
-    host: 'localhost', 
-    user: 'root',
-    password: '',
-    database: 'db_angkot'
+    host: 'database-1.cih0qiu6cd3p.us-east-1.rds.amazonaws.com', // Endpoint AWS kamu
+    user: 'admin',
+    password: 'Dhederoh20', // Password yang baru kamu ganti
+    database: 'db_angkot' // Pastikan kamu sudah buat database ini di HeidiSQL tadi
 });
+
 db.connect((err) => {
     if (err) {
-        console.error('Gagal koneksi ke database:', err.message);
-    } else {
-        console.log('Terhubung ke database MySQL Laragon!');
+        console.error('Gagal koneksi ke AWS RDS:', err);
+        return;
     }
+    console.log('BERHASIL! Terhubung ke database MySQL di AWS RDS!');
 });
 
 // --- KONFIGURASI S3 (Untuk fitur upload) ---

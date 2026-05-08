@@ -5,7 +5,7 @@ on:
     branches: [ "main" ] # Akan jalan otomatis saat kamu push ke branch main
 
 env:
-  AWS_REGION: ap-southeast-1 # Region Singapore (sesuaikan jika kamu pakai region lain)
+  AWS_REGION: us-east-1 
   ECR_REPOSITORY: angkot-track-repo
   ECS_SERVICE: angkot-service
   ECS_CLUSTER: angkot-cluster
@@ -37,6 +37,9 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          # Membangun image docker dengan tag dari commit SHA GitHub
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          # Mengirim image ke Amazon ECR
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          # Menyimpan output lokasi image untuk tahap deployment selanjutnya
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
